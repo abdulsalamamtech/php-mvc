@@ -5,14 +5,16 @@
  * User Model Class
  */
 
-class User{
+class Address{
 
     use Model;
-    protected $table = 'users';
+    protected $table = 'address';
 
     protected $allowedColumn = [
-        'name',
-        'email',
+        'street_no',
+        'lga',
+        'state',
+        'country',
     ];
 
     protected $unwantedResult = [

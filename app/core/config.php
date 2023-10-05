@@ -1,6 +1,9 @@
 <?php
 
-
+// Application Name
+define('APP_NAME', 'MVC USERS');
+define('APP_DESC', 'Best MVC website');
+define('DEBUG', false);
 
 if(strtolower($_SERVER["SERVER_NAME"]) == "localhost"){
 
@@ -8,14 +11,9 @@ if(strtolower($_SERVER["SERVER_NAME"]) == "localhost"){
     define('ROOT', 'http://localhost:1234');
 
     // error reporting for development mode
-    error_reporting(1);
+    error_reporting(DEBUG);
 
     // database connection for localhost
-    // $hostName = "localhost";
-    // $userName = "root";
-    // $dbPassword = "";
-    // $dbName = "php_basic";
-
     // database variables
     define('DB_HOST', 'localhost');
     define('DB_PORT', '3306');

@@ -1,14 +1,14 @@
 <?php
+
+// Start session
 session_start();
 
+// Include initialization file
 include_once "../app/core/init.php";
 
-function show($val){
-    echo "<pre>";
-    print_r($val);
-    echo "</pre>";
-}
-// show($_SERVER);
+// Debugging mode
+DEBUG ? ini_set('display_errors', 1) : ini_set('display_errors', 0);
+
 
 $app = new App;
 $app->loadController();

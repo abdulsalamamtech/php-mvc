@@ -9,22 +9,28 @@ class Home extends Controller{
         $user['password'] = "1234";
 
         $model = new User;
-        // $result = $model->where(['name'=> 'Abdulsalam Abdulrahman'], ['email'=> 'abdulsalam@gmail.com']);
-        $result = $model->insert($user);
+        // $result = $model->findAll();
+        $result = $model->where(['id'=> 15]);
+        // $result = $model->insert($user);
         // $result = $model->delete($user);
         // $result = $model->delete(12);
         // $result = $model->update($user['email'], $user, 'email');
         if($result){
             echo "Query sucessfull";
         }
+
+  
         show($result);
+        show(json($result));
+
+        $model = new Address;
 
 
         // For error messages
-        $qs = $model->$db_status;
-        foreach($qs as $q => $s){
-            echo "DB: " . $q . " == " . $s . "<br>";
-        }
+        // $qs = $model->$db_status;
+        // foreach($qs as $q => $s){
+        //     echo "DB: " . $q . " == " . $s . "<br>";
+        // }
 
         echo "Home controller";
 

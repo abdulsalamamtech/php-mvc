@@ -7,14 +7,30 @@
 Trait Model
 {
     use Database;
-    protected $limit = 10;
-    protected $offset = 0;
 
+    protected string $order_column = 'id';
+    protected string $order_type = 'DESC';
+    protected int $limit = 10;
+    protected int $offset = 0;
+
+
+    // Get all data from database
+    public function findAll()
+    {
+        $query = "SELECT * FROM $this->table";        
+        $query = trim($query, " && ");
+        // ORDER BY id DESC LIMIT 10 OFFSET 0
+        $query .= " ORDER BY $this->order_column $this->order_type LIMIT $this->limit OFFSET $this->offset";
+
+        return $this->query($query);
+
+    }
 
     // Get specific data from database
-    public function where($data, $data_not = []) 
+    public function where(array $data, array $data_not = []) 
     {
         $query = "SELECT * FROM $this->table WHERE ";
+
 
         $keys = array_keys($data);
         foreach($keys as $key){
@@ -27,7 +43,8 @@ Trait Model
         }
         
         $query = trim($query, " && ");
-        $query .= " limit $this->limit offset $this->offset";
+        // ORDER BY id DESC LIMIT 10 OFFSET 0
+        $query .= " ORDER BY $this->order_column $this->order_type LIMIT $this->limit OFFSET $this->offset";
         $data = array_merge($data, $data_not);
 
         return $this->query($query, $data);
@@ -35,7 +52,7 @@ Trait Model
     }
 
     // Get the first row in database
-    public function first($data, $data_not)
+    public function first(array $data, array $data_not)
     {
         $query = "SELECT * FROM $this->table WHERE ";
 
@@ -59,8 +76,17 @@ Trait Model
     }
 
     // Insert data into database
-    public function insert($data)
+    public function insert(array $data)
     {
+
+        // Removing unwanted data before sending it to database
+        if(!empty($this->allowedColumn)){
+            foreach($data as $key => $value){
+                if(!in_array($key, $this->allowedColumn)){
+                    unset($data[$key]);
+                }
+            }
+        }
 
         $keys = implode(", ", array_keys($data));
         $values = ":" . implode(", :", array_keys($data));
@@ -77,8 +103,17 @@ Trait Model
     // UPDATE users SET name =:name, email =:email WHERE id = :id
     // update('amtech digital', ['email'=> 'abdulsalamamtech@gmail.com'], 'name');
     // UPDATE users SET name =:name, email =:email WHERE name = :name
-    public function update($id, $data, $id_column = 'id')
+    public function update(int $id, array $data, string $id_column = 'id')
     {
+
+        // Removing unwanted data before sending it to database
+        if(!empty($this->allowedColumn)){
+            foreach($data as $key => $value){
+                if(!in_array($key, $this->allowedColumn)){
+                    unset($data[$key]);
+                }
+            }
+        }
 
         $query = "UPDATE $this->table SET ";
 
@@ -131,7 +166,7 @@ Trait Model
 
     }
 
-    public function get_row($query, $data = [])
+    public function get_row(string $query, array $data = [])
     {
 
         $conn = $this->connect(); 

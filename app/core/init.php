@@ -1,11 +1,14 @@
 <?php
 
-// Autoload class
+// Autoload class, pass in any variable to the function to serve as the class name
 spl_autoload_register(function($classname){
     $filename = "../app/models/" . ucfirst($classname) . ".php";
-    require $filename;
+    if(file_exists($filename)){
+        require $filename;
+    }
 });
 
+// Reguire all necessry file acording to hierarchy
 require "config.php";
 require "functions.php";
 require "Database.php";
