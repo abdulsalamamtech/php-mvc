@@ -9,9 +9,8 @@ function show($value){
 }
 // show($_SERVER);
 
-
 // Escape string
-function esc($tring){
+function esc($string){
     return htmlspecialchars($string);
 }
 
@@ -23,4 +22,22 @@ function json($value){
 // Return array formatted json
 function html($value){
     return json_decode($value);
+}
+
+// Redirect function
+function redirect($path){
+    header('Location:' . ROOT . '/' . $path);
+    die();
+}
+
+// Load Binary Image
+function binToImage($file){
+    $base64 = base64_encode($file);
+    return ('data:'.'image/png'.';base64,'.$base64);
+}
+
+// Load Binary Video
+function binToVideo($file){
+    $base64 = base64_encode($file);
+    return ('data:'.'video/mp4'.';base64,'.$base64);
 }
