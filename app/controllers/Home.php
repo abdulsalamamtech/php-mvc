@@ -13,15 +13,10 @@ class Home{
         show($a);
         show($b);
         show($c);
+        
+        $v = "This is a data view";
 
-        $dis = new User;
-        // $dis->update(10);
-        // $dis->update(1, ['email'=>'amtech@gmail.com', 'password'=>'amtech@gmail.com']);
-        // $dis->disable(10);
-        // $dis->disable('10');
-        $dis->disable(['email'=>'amtech<@gmail.com@gmail.com<>yy<>', 'password'=>'amtech@gmail.com']);
-
-        // $this->view("index");
+        $this->view("index");
 
     }
 

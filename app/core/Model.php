@@ -19,7 +19,16 @@ Trait Model
     public array $errors = [];
 
     /**
-     * Summary of removeUnwantedColumns
+     * Summary of limit_action
+     * if set to true it will only perform action to one row
+     * if set to false it will perform action to multiple row
+     * @var int|bool
+     */
+    public int|bool $limit_action = true;
+
+
+    /**
+     * Summary of removeUnwantedColumns and escape data
      * Removing unwanted data or columns before sending it to database
      * filter from the allowed column class
      * @param mixed $data
@@ -185,27 +194,40 @@ Trait Model
     }
 
 
+    /**
+     * Summary of disable
+     * this disable a field set the status to 0
+     * @param mixed $data
+     * @param mixed $data_not
+     * @return bool true|false
+     */
     public function disable($data = null, $data_not = [])
     {
         // disable the column
         $status['status'] = 0;
+        // Set limit
+        $limit = ($this->limit_action)? " limit 0" : '';
+
 
         // Removing unwanted data before sending it to database
         $this->removeUnwantedColumns($data);
-        echo __LINE__ . show($data);
-
 
         $query = "UPDATE $this->table SET ";
         $query .= " status =:status WHERE ";
 
         // Check if the data is integer
         if(is_int($data) && !empty($data)){
-            echo "<br> is int and not empty <br>";
+            $id = $data;
             $query .= " id =:id";
+
+            // If data is not set to array,you will get an error
+            // To fix this error, you need to make sure that the 
+            // variable is an array before you use it as an array
+            $data = [];
+            $data['id'] = $id;
 
         // Check if the data is array
         }elseif(is_array($data) && !empty($data)){
-            echo "<br> is array and not empty <br>";
             $keys = array_keys($data);
             foreach($keys as $key){
                 $query .= $key . " =:" . $key . " && ";
@@ -221,17 +243,76 @@ Trait Model
         }
         
         $query = trim($query, " && ");
-        $query .= " limit 1";
+        $query .= $limit;
 
-        // bind the status variable
+        // bind the status variable  set data to array before binding
         $data['status'] = $status['status'];
 
+        $result =  $this->query($query, $data);
+        return ($result)?  true : false;
 
-        show($query);
-        show($data);
+    }
 
-        // $result =  $this->query($query, $data);
-        // return ($result)?  true : false;
+
+    /**
+     * Summary of enable
+     * this enable a field set the status to 1
+     * @param mixed $data
+     * @param mixed $data_not
+     * @return bool true|false
+     */
+    public function enable($data = null, $data_not = [])
+    {
+        // disable the column
+        $status['status'] = 1;
+        // Set limit
+        $limit = ($this->limit_action)? " limit 0" : '';
+
+
+
+
+        // Removing unwanted data before sending it to database
+        $this->removeUnwantedColumns($data);
+
+        $query = "UPDATE $this->table SET ";
+        $query .= " status =:status WHERE ";
+
+        // Check if the data is integer
+        if(is_int($data) && !empty($data)){
+            $id = $data;
+            $query .= " id =:id";
+
+            // If data is not set to array,you will get an error
+            // To fix this error, you need to make sure that the 
+            // variable is an array before you use it as an array
+            $data = [];
+            $data['id'] = $id;
+
+        // Check if the data is array
+        }elseif(is_array($data) && !empty($data)){
+            $keys = array_keys($data);
+            foreach($keys as $key){
+                $query .= $key . " =:" . $key . " && ";
+            }
+
+            $keys_not = array_keys($data_not);
+            foreach($keys_not as $key){
+                $query .= $key . " !=:" . $key . " && ";
+            }
+
+        }else{
+            return false;
+        }
+        
+        $query = trim($query, " && ");
+        $query .= "$limit";
+
+
+        // bind the status variable  set data to array before binding
+        $data['status'] = $status['status'];
+
+        $result =  $this->query($query, $data);
+        return ($result)?  true : false;
 
     }
 
@@ -253,7 +334,6 @@ Trait Model
 
     }
 
-    
     
     /**
      * Summary of delete_multiple

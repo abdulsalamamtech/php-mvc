@@ -6,6 +6,10 @@
     align-items: center;
     justify-content: center;
 }
+.error{
+    color: red;
+}
+
 h1{
     color: #0c1c9c;
 }

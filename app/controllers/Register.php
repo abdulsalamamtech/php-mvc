@@ -9,11 +9,13 @@ class Register{
     public function index($a='', $b='', $c=''){
 
         $result = "From Register Index";
+        show($result);
+
 
         // $data['id'] = 8;
-        // $data['name'] = "Bala Muhammad";
+        $data['name'] = "Bala Muhammad";
         // $data['email'] = "balamuhammad@gmail.com";
-        $data['email'] = "balamuhammad";
+        // $data['email'] = "balamuhammad";
         $data['password'] = "1234";
 
         show($data);
@@ -27,8 +29,7 @@ class Register{
 
         $errors = $user->errors;
         show($errors);
-        show($result);
-        $this->view("about");
+        $this->view("errors", $errors);
 
     }
 

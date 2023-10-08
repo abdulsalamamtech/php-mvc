@@ -2,7 +2,13 @@
 
 Trait Controller{
 
-    public function view($name){
+    public function view($name, $data = []){
+
+        // Extract the data pass into the view
+        if(!empty($data)){
+            extract($data);
+        }
+
         $file_name = "../app/views/" . $name . ".view.php";
         if(file_exists($file_name)){
             include_once $file_name;

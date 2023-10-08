@@ -11,5 +11,6 @@
 
 
 <?php
+    echo $v;
     // include "/layouts/header.php";
 ?>
