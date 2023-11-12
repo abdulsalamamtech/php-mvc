@@ -15,7 +15,6 @@ class Register{
         // $data['id'] = 8;
         $data['name'] = "Bala Muhammad";
         // $data['email'] = "balamuhammad@gmail.com";
-        // $data['email'] = "balamuhammad";
         $data['password'] = "1234";
 
         show($data);

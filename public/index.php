@@ -1,16 +1,12 @@
 <?php
 
-// Start session
-session_start();
-
-
-// Include initialization file
+// Include initialization files
 include_once "../app/core/init.php";
 // End of initialization
 
 
 // Header 
-include "layouts/header.php";
+// include "layouts/header.php";
 // End of header
 
 
@@ -27,8 +23,9 @@ $app->loadController();
 
 
 
+
 <!-- Footer -->
 <?php
-    include "layouts/footer.php";
+    // include "layouts/footer.php";
 ?>
 <!-- End of footer -->

@@ -13,8 +13,8 @@ Trait Model
 
     protected string $order_column = 'id';
     protected string $order_type = 'DESC';
-    protected int $limit = 10;
-    protected int $offset = 0;
+    public int $limit = 10;
+    public int $offset = 0;
 
     public array $errors = [];
 
@@ -59,7 +59,8 @@ Trait Model
         $query = "SELECT * FROM $this->table";        
         $query = trim($query, " && ");
         // ORDER BY id DESC LIMIT 10 OFFSET 0
-        $query .= " ORDER BY $this->order_column $this->order_type LIMIT $this->limit OFFSET $this->offset";
+        $query .= " ORDER BY $this->order_column $this->order_type 
+                    LIMIT $this->limit OFFSET $this->offset";
 
         return $this->query($query);
 
@@ -74,7 +75,7 @@ Trait Model
      * @return mixed
      * return the first data from the result
      */
-    public function first(array $data, array $data_not)
+    public function first(array $data, array $data_not = [])
     {
         // Select all data from database where data ='' and != ''
         $query = "SELECT * FROM $this->table WHERE ";
@@ -185,8 +186,8 @@ Trait Model
         $query = trim($query, ", ");
         $query .= " WHERE $id_column = :$id_column limit 1";
 
-        show($query);
-        show($data);
+        // show($query);
+        // show($data);
 
         $result =  $this->query($query, $data);
         return ($result)?  true : false;
@@ -196,7 +197,7 @@ Trait Model
 
     /**
      * Summary of disable
-     * this disable a field set the status to 0
+     * this disable a field, set the status to 0
      * @param mixed $data
      * @param mixed $data_not
      * @return bool true|false
@@ -256,7 +257,7 @@ Trait Model
 
     /**
      * Summary of enable
-     * this enable a field set the status to 1
+     * this enable a field, set the status to 1
      * @param mixed $data
      * @param mixed $data_not
      * @return bool true|false
@@ -370,6 +371,7 @@ Trait Model
      * Summary of get_row
      * You can pass in your query and data directly
      * SELECT * FROM users WHERE id = :user_id
+     * for testing purpose
      * @param string $query
      * @param array $data
      * @return array|bool

@@ -9,6 +9,44 @@ function show($value){
 }
 // show($_SERVER);
 
+
+// Pagination
+function paginate($page=1, $limit= 10){
+    $current_page = (int) isset($page)? $page : 1;
+    $offset = (int) ($current_page -1) * (int) $limit;
+    $offset = ceil(abs($offset));
+    return $offset;
+}
+
+// Response
+function response($data = array(), $status = 400, $message = null){
+
+        if($status < 100){
+            $message = $message ?? 'unknown errro';
+        }
+        elseif($status <= 199){
+            $message = $message ?? 'processing information';
+        }
+        elseif($status <= 299){
+            $message = $message ?? 'successfull';
+        }
+        elseif($status <= 399){
+            $message = $message ?? 'redirecting';
+        }elseif($status <= 499){
+            $message = $message ?? 'not found';
+        }elseif($status <= 599){
+            $message = $message ?? 'server error';
+        }else{
+            $message = 'error';
+        }
+
+    http_response_code($status);
+    $response['status'] = $status;
+    $response['message'] = $message;
+    $response['data'] = $data ?? [];
+    return json($response);
+}
+
 // Escape string
 function esc($string){
     return htmlspecialchars($string);

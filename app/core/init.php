@@ -10,6 +10,7 @@ spl_autoload_register(function($classname){
 
 // Reguire all necessry file acording to hierarchy
 require "config.php";
+require "Session.php";
 require "functions.php";
 require "Database.php";
 require "Model.php";

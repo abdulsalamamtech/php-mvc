@@ -27,7 +27,8 @@ class App{
         // Get the contoller file name
         $file_name = "../app/controllers/" . ucfirst($URL[0]) . ".php";
 
-        show($URL);
+        // Uncomment to check the url
+        // show($URL);
 
         // Checking for controller as the first element in the array
         if(file_exists($file_name)){
