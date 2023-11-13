@@ -41,10 +41,13 @@ class User{
         // Password Validation
         if(empty($data['password'])){
             $this->errors['password'] = "password is required";
+        }else{
+            $data['password'] = $this->hashPassword($data["password"]);
         }
         
         if(empty($this->errors)){
-            return true;
+
+            return $data;
         }
 
         return false;

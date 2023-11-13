@@ -402,5 +402,58 @@ Trait Model
         return false;
     }
 
+
+    public function login(array $data){
+
+        show($data);
+
+        $login_email = $this->first([
+            'email' => $data['email']
+        ]);
+
+        show($login_email);
+
+        if(!$login_email){
+
+            $this->session->setErrors = "incorrect login credentials";
+            // $this->session->setErrors = "incorrect login credentials";
+        }else{
+            // $this->session->setSuccess = 'login successful';
+            $this->session->set('login','login successful');
+        }
+ 
+        if($this->verifyPassword($data['password'], $login_email['password'])){
+            echo $data['email'] . " verified <br>";
+        }else{
+            echo $data['email'] . " not verified <br>";
+        }
+
+
+        // $details = ['id', 'email'];
+        // foreach($login as $key => $value) {
+        //     echo $key . "...<br>";
+        //     if(!in_array($key, $details)){
+        //         unset( $login[$key] );
+        //     }
+        // }
+
+        // show($login);
+
+        // if($login){
+        //     $session = new Session;
+        //     $session->set("user", $login);
+        // }
+
+        return "login in...";
+    }
+
+    public function hashPassword($data){
+        return password_hash($data, PASSWORD_DEFAULT);
+    }
+
+    public function verifyPassword($data, $hash_data){
+        return password_verify($data, $hash_data);
+    }
+
      
 }

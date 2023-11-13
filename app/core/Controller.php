@@ -4,16 +4,23 @@ use Doctrine\DBAL\Driver\Mysqli\Initializer;
 
 Trait Controller{
 
-    // The request
+    // The Request
     public $request;
-    // The response
+    // The Response
     public $response;
+
+    // The Session
+    public $session;
     
     public function __construct(){
-        // Initialize the request
+        
+        // Initialize the Request
         $this->request = new Request();
-        // Initialize the response
+        // Initialize the Response
         $this->response = new Response();
+
+        // Initialize the Session
+        $this->response = new Session();
     }
 
     public function view($name, $data = []){
