@@ -17,6 +17,7 @@ Trait Model
     public int $offset = 0;
 
     public array $errors = [];
+    public array $success = [];
 
     /**
      * Summary of limit_action
@@ -411,15 +412,13 @@ Trait Model
             'email' => $data['email']
         ]);
 
-        show($login_email);
+        // show($login_email);
+
 
         if(!$login_email){
-
-            $this->session->setErrors = "incorrect login credentials";
-            // $this->session->setErrors = "incorrect login credentials";
+            $this->errors['login'] = "incorrect login credentials";
         }else{
-            // $this->session->setSuccess = 'login successful';
-            $this->session->set('login','login successful');
+            $this->success['login'] = 'login successful';
         }
  
         if($this->verifyPassword($data['password'], $login_email['password'])){

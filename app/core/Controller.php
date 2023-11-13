@@ -9,8 +9,6 @@ Trait Controller{
     // The Response
     public $response;
 
-    // The Session
-    public $session;
     
     public function __construct(){
         
@@ -18,9 +16,7 @@ Trait Controller{
         $this->request = new Request();
         // Initialize the Response
         $this->response = new Response();
-
-        // Initialize the Session
-        $this->response = new Session();
+        
     }
 
     public function view($name, $data = []){

@@ -6,19 +6,13 @@ session_start();
 
 class Session{
 
-    public $success = array();
-    public $error;
+
 
     // Regenerate a unique session id 
     // everytme the application is refresh
     // this will improve the security of the app
     public function __construct(){
         session_regenerate_id();
-    }
-
-    public function setSuccess( $key, $value){
-        $_SESSION[$key] = $value;
-        $_SESSION["success"] = $_SESSION[$key];
     }
 
 

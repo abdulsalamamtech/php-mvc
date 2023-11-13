@@ -49,19 +49,17 @@ class Register{
     public function log($id){
 
         $user = new User;
-        
+
         $p = $user->login([
             'email' => $id['email'],
             'password' => "1234"
         ]);
         show($p);
 
-        
-        $se = $this->session->errors;
-        show($se);
-
-        // $errors = $user->errors;
-        // show($errors);
+        $errors = $user->errors;
+        show($errors);
+        $success = $user->success;
+        show($success);
     }
 }
 

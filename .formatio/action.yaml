@@ -6,35 +6,38 @@ on:
       - main
 
 jobs:
-  install-php-mysql:
-    runs-on: ubuntu-latest
+  install-php:
+    - name: Update the package list
+      run: sudo apt update && sudo apt -y upgrade
 
+    - name: Install PHP
+      run: sudo apt install -y php php-mysql
+
+  setup-mysql:
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Update the package list
-        run: sudo apt update
-
-      - name: Install PHP
-        run: sudo apt install -y php php-mysql
+      - name: Configure database
+        run: echo "mysql-server mysql-server/root_password password test-password" | sudo debconf-set-selections && \
+          echo "mysql-server mysql-server/root_password_again password test-password" | sudo debconf-set-selections
 
       - name: Install MySQL
         run: sudo apt install -y mysql-server
+      
+      - name: Start MySQL server
+        run: sudo service mysql start
 
-      - name: Secure MySQL installation
-        run: sudo mysql_secure_installation
+      - name: Test connection to MySQL
+        run: sudo mysql -h localhost -u root --password=test-password -e "SHOW DATABASES;"
 
-      - name: Test PHP connection to MySQL
-        run: |
-          <?php
-            $conn = new mysqli('localhost', 'root', '', 'mysql');
+  setup-nodejs:
+    - name: Install NodeJS
+      run: cd ~ && curl -sL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh && sudo bash /tmp/nodesource_setup.sh && sudo apt install -y nodejs
 
-            if (!$conn) {
-                die('Connection failed: ' . mysqli_connect_error());
-            }
+    - name: Install pm2
+      run: sudo npm install pm2@latest -g
 
-            echo 'Connected to MySQL successfully.';
+  deploy:
+    - name: Start php server
+      run: pm2 delete "php-app" || true && pm2 start "php -S localhost:8080" --name "php-app"
 
-            mysqli_close($conn);
-          ?>
+    - name: Save pm2 config
+      run: pm2 save
