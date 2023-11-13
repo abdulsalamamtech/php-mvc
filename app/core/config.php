@@ -6,6 +6,9 @@ define('APP_NAME', 'MVC USERS');
 // Application Description
 define('APP_DESC', 'Best MVC website');
 
+// Website Origin 
+define('APP_ORIGIN', 'https://bit.ly/abdulsalamamtech');
+
 // Debugging Mode
 define('DEBUG', false);
 

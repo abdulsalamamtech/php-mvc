@@ -1,0 +1,11 @@
+Formatio
+
+Add Network Records
+Machine
+PHP-MVC-API
+Protocol
+TCP
+80
+Ingress Port
+8080
+Egress Port

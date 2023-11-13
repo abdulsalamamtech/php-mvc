@@ -1,6 +1,20 @@
 <?php
 
+use Doctrine\DBAL\Driver\Mysqli\Initializer;
+
 Trait Controller{
+
+    // The request
+    public $request;
+    // The response
+    public $response;
+    
+    public function __construct(){
+        // Initialize the request
+        $this->request = new Request();
+        // Initialize the response
+        $this->response = new Response();
+    }
 
     public function view($name, $data = []){
 

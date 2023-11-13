@@ -53,7 +53,7 @@ class App{
             }
         }
 
-        show($URL);
+        // show($URL);
         
 
         // Setting and initializing the controller class
