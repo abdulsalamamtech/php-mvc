@@ -1,0 +1,20 @@
+name: PHP MVC API
+on:
+  push:
+    branches: -main
+  pull_request:
+    branches: -main
+services:
+  php:
+    image: php:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ghcr.io/overal-x/formatio/ubuntu:/var/www/html
+    networks:
+      - mynetwork
+    command: php -S 0.0.0.0:80 -t /var/www/html
+
+networks:
+  mynetwork:
+    driver: bridge

@@ -6,7 +6,7 @@ class Register{
 
     use Controller;
 
-    public function index($a='', $b='', $c=''){
+    public function index(){
 
         $result = "From Register Index";
         show($result);
