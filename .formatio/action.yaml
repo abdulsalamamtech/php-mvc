@@ -1,32 +1,40 @@
-name: PHP MVC API
+name: PHP MVC API Install PHP and MySQL
+
 on:
   push:
-    branches: -main
+    branches:
+      - main
+
 jobs:
-  build:
+  install-php-mysql:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1^'
-    - name: Install dependencies
-      run: composer install
-services:
-  php:
-    image: php:latest
-    ports:
-      - "8080:80"
-    volumes:
-      - ghcr.io/overal-x/formatio/ubuntu:/var/www/html
-    networks:
-      - mynetwork
-    command: php -S 0.0.0.0:80 -t /var/www/html
+      - name: Update the package list
+        run: sudo apt update
 
-networks:
-  mynetwork:
-    driver: bridge
+      - name: Install PHP
+        run: sudo apt install -y php php-mysql
+
+      - name: Install MySQL
+        run: sudo apt install -y mysql-server
+
+      - name: Secure MySQL installation
+        run: sudo mysql_secure_installation
+
+      - name: Test PHP connection to MySQL
+        run: |
+          <?php
+            $conn = new mysqli('localhost', 'root', '', 'mysql');
+
+            if (!$conn) {
+                die('Connection failed: ' . mysqli_connect_error());
+            }
+
+            echo 'Connected to MySQL successfully.';
+
+            mysqli_close($conn);
+          ?>
