@@ -6,7 +6,10 @@ class _404{
 
     public function index($a){
 
-        $this->view("404");
+        $resp = resp([], "404", "page not found");
+        echo($resp);
+        // $this->view("404");
+        // exit();
     }
 }
 

@@ -2,7 +2,7 @@
 
 
 /**
- * User Model Class
+ * Address Model Class
  */
 
 class Address{

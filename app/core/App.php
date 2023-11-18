@@ -1,14 +1,13 @@
 <?php
 
-// show($_SERVER);
-// show(date("U"));
-// show(time());
-// show(ROOT);
-
+/**
+ * App Core Class
+ */
 class App{
 
     private $controller = "home";
     private $method = "index";
+
 
     // Split the request uri
     private function splitUrl(){
@@ -16,13 +15,31 @@ class App{
         $path = !trim($_SERVER['REQUEST_URI'], "/")
             ? "home"
             :trim($_SERVER['REQUEST_URI'], "/");
+    
         return explode("/", $path);
     }
 
     // Loading Controller
     public function loadController(){
 
-        // Split the URL int arrays
+        // checking for the access for the quest, user and admin
+        function URL_ACCESS($url){
+            // if the url is not for api call
+            if($url != 'api'){
+                $Auth = new Auth();
+                if(Auth::$access == 'quest'){
+                    $Auth->check($url, $Auth->quest());
+                }elseif(Auth::$access == 'user'){
+                    $Auth->check($url, $Auth->user());
+                }elseif(Auth::$access == 'admin'){
+                    $Auth->check($url, $Auth->admin());
+                }else{
+                    Auth::$access = 'quest';
+                }
+            }
+        }
+
+        // Split the URL into arrays
         $URL = $this->splitUrl();
         // Get the contoller file name
         $file_name = "../app/controllers/" . ucfirst($URL[0]) . ".php";
@@ -30,8 +47,13 @@ class App{
         // Uncomment to check the url
         // show($URL);
 
+        
         // Checking for controller as the first element in the array
         if(file_exists($file_name)){
+
+            // check if the user can access the controller page
+            URL_ACCESS($URL[0]);
+
             include_once $file_name;
             // Set the controller
             $this->controller = ucfirst($URL[0]);
@@ -46,6 +68,10 @@ class App{
         if(!empty($URL[1])){
             // check if the method exist in the controller class
             if(method_exists($this->controller, $URL[1])){
+                
+                // check if the user can access the controller page
+                URL_ACCESS($URL[1]);
+
                 // Set the method
                 $this->method = $URL[1];
                 // Remove the method from the URL array
@@ -53,8 +79,8 @@ class App{
             }
         }
 
+        // Uncomment to check the url
         // show($URL);
-        
 
         // Setting and initializing the controller class
         $controller = new $this->controller;

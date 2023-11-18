@@ -1,5 +1,8 @@
 <?php   
 
+/**
+ * Session Core Class
+ */
 
 // Start session
 session_start();

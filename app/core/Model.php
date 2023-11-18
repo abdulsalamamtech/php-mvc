@@ -5,7 +5,7 @@
  */
 
 // Advice when creating your table add the following column
-// id, status, updated_at created_at
+// id, status, updated_at, created_at
 
 Trait Model
 {
@@ -27,6 +27,22 @@ Trait Model
      */
     public int|bool $limit_action = true;
 
+    // Remove unwated data and leave the fillable once
+    // Filter the data and send to the database
+    private function fillableData(array $data){
+        if(!empty($this->allowedData)){
+            foreach($data as $key => $value){
+                if(!in_array($key, $this->allowedData)){
+                    unset($data[$key]);
+                }
+                
+                $data = [$key => esc($value)];
+
+            }
+
+        }
+        return $data;
+    }
 
     /**
      * Summary of removeUnwantedColumns and escape data
@@ -35,18 +51,6 @@ Trait Model
      * @param mixed $data
      * @return void
      */
-    protected function removeUnwantedColumns($data){
-
-        if(!empty($this->allowedColumn)){
-            foreach($data as $key => $value){
-                if(!in_array($key, $this->allowedColumn)){
-                    unset($data[$key]);
-                }
-                
-                $data = [$key => esc($value)];
-            }
-        }
-    }
 
 
     /**
@@ -145,7 +149,7 @@ Trait Model
     {
 
         // Removing unwanted data before sending it to database
-        $this->removeUnwantedColumns($data);
+        $data = $this->fillableData($data);
 
         $keys = implode(", ", array_keys($data));
         $values = ":" . implode(", :", array_keys($data));
@@ -172,9 +176,6 @@ Trait Model
      */
     public function update(int $id, array $data, string $id_column = 'id')
     {
-
-        // Removing unwanted data before sending it to database
-        $this->removeUnwantedColumns($data);
 
         $query = "UPDATE $this->table SET ";
 
@@ -209,10 +210,6 @@ Trait Model
         $status['status'] = 0;
         // Set limit
         $limit = ($this->limit_action)? " limit 0" : '';
-
-
-        // Removing unwanted data before sending it to database
-        $this->removeUnwantedColumns($data);
 
         $query = "UPDATE $this->table SET ";
         $query .= " status =:status WHERE ";
@@ -269,12 +266,6 @@ Trait Model
         $status['status'] = 1;
         // Set limit
         $limit = ($this->limit_action)? " limit 0" : '';
-
-
-
-
-        // Removing unwanted data before sending it to database
-        $this->removeUnwantedColumns($data);
 
         $query = "UPDATE $this->table SET ";
         $query .= " status =:status WHERE ";
@@ -403,47 +394,84 @@ Trait Model
         return false;
     }
 
+    public function register(array $data){
+        // empty the error
+        $this->errors = [];
+
+        // hash the password
+        $data['password'] = $this->hashPassword($data["password"]);
+        $registered = $this->insert($data);
+        if(!$registered){
+            $this->error['register'] = "please try again later, something went wrong";
+            return false;
+        }else{
+            $this->success['register'] = "registration successful";
+        }
+        return true;
+    }
 
     public function login(array $data){
+        // empty the error
+        $this->errors = [];
 
-        show($data);
+        // messages to display
+        $error = "incorrect login credentials";
+        $success = "login successful";
 
+        // chech database for the user email account 
         $login_email = $this->first([
             'email' => $data['email']
         ]);
 
-        // show($login_email);
-
-
+        // Get user detail using email account
         if(!$login_email){
-            $this->errors['login'] = "incorrect login credentials";
+            // user does not exist
+            $this->errors['login'] = $error;
+            return false;
         }else{
-            $this->success['login'] = 'login successful';
+
+            // validate the user email account
+            if(!$this->verifyPassword($data['password'], $login_email['password'])){
+
+                // wrong password
+                $this->errors['login'] = $error;
+                return false;
+
+            }else{
+
+                // validation successful
+                $this->success['login'] = $success;
+
+                // save the user id and email to the session
+                $details = ['id', 'status', 'token'];
+                foreach($login_email as $key => $value) {
+                    if(!in_array($key, $details)){
+                        unset( $login_email[$key] );
+                    }
+                }
+
+                // save the user details to session
+                Auth::Auth($login_email, 'api');
+                return true;
+            }
+
         }
  
-        if($this->verifyPassword($data['password'], $login_email['password'])){
-            echo $data['email'] . " verified <br>";
-        }else{
-            echo $data['email'] . " not verified <br>";
+    }
+
+    public function logout() {
+        if(!empty(Auth::$access)){
+            Auth::$access = 'quest';
         }
+        
+        // Unset all session variables
+        unset($_SESSION['user']);
+        $_SESSION = array();
 
+        // Destroy the session
+        session_destroy();
 
-        // $details = ['id', 'email'];
-        // foreach($login as $key => $value) {
-        //     echo $key . "...<br>";
-        //     if(!in_array($key, $details)){
-        //         unset( $login[$key] );
-        //     }
-        // }
-
-        // show($login);
-
-        // if($login){
-        //     $session = new Session;
-        //     $session->set("user", $login);
-        // }
-
-        return "login in...";
+        return true;
     }
 
     public function hashPassword($data){
@@ -454,5 +482,54 @@ Trait Model
         return password_verify($data, $hash_data);
     }
 
-     
+
+    public function validateApiToken(array $data){
+        // empty the error
+        $this->errors = [];
+
+        // messages to display
+        $error = "incorrect api token";
+        $success = "api token validated successfully";
+
+        // chech database for the user email account 
+        $api_token = $this->first([
+            'token' => $data['token']
+        ]);
+
+        // Get api detail token
+        if(!$api_token){
+            // api token does not exist
+            $this->errors['token'] = $error;
+            return false;
+        }else{
+
+            // validate the api token
+            if(!$this->verifyPassword($data['token'], $api_token['hash_token'])){
+
+                // wrong api token
+                $this->errors['token'] = $error;
+                return false;
+
+            }else{
+
+                // validation successful
+                $this->success['token'] = $success;
+
+                // save the api id token and status to the session
+                $details = ['id', 'status', 'token'];
+                foreach($api_token as $key => $value) {
+                    if(!in_array($key, $details)){
+                        unset( $api_token[$key] );
+                    }
+                }
+
+                // save the user details to session
+                Auth::Auth($api_token, 'api');
+                return true;
+            }
+
+        }
+ 
+    }
+
 }

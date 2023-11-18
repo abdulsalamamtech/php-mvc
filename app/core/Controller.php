@@ -1,7 +1,8 @@
 <?php
 
-use Doctrine\DBAL\Driver\Mysqli\Initializer;
-
+/**
+ * Contoller Trait
+ */
 Trait Controller{
 
     // The Request
@@ -11,12 +12,10 @@ Trait Controller{
 
     
     public function __construct(){
-        
         // Initialize the Request
         $this->request = new Request();
         // Initialize the Response
         $this->response = new Response();
-        
     }
 
     public function view($name, $data = []){
