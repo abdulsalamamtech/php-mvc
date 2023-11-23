@@ -1,5 +1,8 @@
 <?php   
 
+/**
+ * Request Core Class
+ */
 
 class Request{
 
@@ -17,7 +20,7 @@ class Request{
             || strtoupper($_SERVER['REQUEST_METHOD']) == 'PATCH'
             || strtoupper($_SERVER['REQUEST_METHOD']) == 'UPDATE'))
         {
-            return "update";
+            return "UPDATE";
 
         }
         elseif(isset($_SERVER['REQUEST_METHOD']) 
@@ -25,24 +28,24 @@ class Request{
             || strtoupper($_POST['_method']) == 'DELETE'
             || strtoupper($_SERVER['REQUEST_METHOD']) == 'DELETE'))
         {
-            return "delete";
+            return "DELETE";
         }
         elseif(isset($_SERVER['REQUEST_METHOD']) 
             && (strtoupper($_GET['_method']) == 'POST'
             || strtoupper($_POST['_method']) == 'POST' 
             || strtoupper($_SERVER['REQUEST_METHOD']) == 'POST'))
         {
-            return "post";
+            return "POST";
         }
         elseif(isset($_SERVER['REQUEST_METHOD']) 
             && (strtoupper($_GET['_method']) == 'GET'
             || strtoupper($_POST['_method']) == 'GET' 
             || strtoupper($_SERVER['REQUEST_METHOD']) == 'GET'))
         {
-            return "get";
+            return "GET";
         }
         else{
-            return false;
+            return 'GET';
         }
 
     }
@@ -54,7 +57,7 @@ class Request{
 
     // Request header
     public function header(){
-        return;
+        return getallheaders();
     }
 
 }

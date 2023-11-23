@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Config Core File
+ */
+
 // Application Name
 define('APP_NAME', 'MVC USERS');
 

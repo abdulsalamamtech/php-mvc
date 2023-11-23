@@ -1,5 +1,8 @@
 <?php   
 
+/**
+ * Respose Core Class
+ */
 
 class Response{
 
@@ -37,3 +40,14 @@ class Response{
     }
 
 }
+
+
+/*
+
+$status[
+    '100'=>'information',
+    '101'=>'information',
+    '401'=>'unauthorized',
+];
+
+*/
