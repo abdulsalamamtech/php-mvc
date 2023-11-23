@@ -202,6 +202,7 @@ pagination and limit
 
 **Response**
 
+```json
 {
     "status": "200",
     "success": "true",
@@ -227,4 +228,4 @@ pagination and limit
         }
     ]
 }
-
+```
