@@ -7,9 +7,12 @@
 
 
 
-Creating new user
+>>>**Creating new user**
+
 class = store
+
 method = POST
+
 *https://app.com/users/*
 
 {
@@ -20,7 +23,8 @@ method = POST
     }
 }
 
-Response
+
+**Response**
 
 {
     "status": "200",
@@ -33,16 +37,24 @@ Response
 
 
 
-Creating new user
+>>>**Creating new user**
+
 data can also be pass using query parameters
+
 class = store
+
 method = POST
+
 *https://app.com/users/?name=abdulsalam&email=abdulsalam@gmail.com&password=1234*
+
 OR
+
 *https://app.com/users/?_method=post&name=abdulsalam&email=abdulsalam@gmail.com&password=1234*
 
-Response
 
+**Response**
+
+```json
 {
     "status": "200",
     "success": "true",
@@ -51,19 +63,31 @@ Response
         "id": "22"
     }
 }
+```
 
 
+>>>**Showing users**
 
-Showing users
 Get user by id
+
 class = show
+
 method = GET
+
 *https://app.com/users/23/*
+
 OR
+
 *https://app.com/users/?id=23*
+
 OR
+
 *https://app.com/users/?_method=get&id=23*
 
+
+**Response**
+
+```json
 {
     "status": "200",
     "success": "true",
@@ -75,20 +99,32 @@ OR
         "status": 1
     }
 }
+```
 
 
 
 
 
-Update user
+>>>**Update user**
+
 class = update
+
 method = UPDATE
+
 *https://app.com/users/30/*
+
 OR
+
 *https://app.com/users/?id=30*
+
 OR
+
 *https://app.com/users/?_method=update&id=30*
 
+
+**Response**
+
+```json
 {
    "status": "200",
     "success": "true",
@@ -97,22 +133,31 @@ OR
         "id": 30
     }
 }
+```
 
 
 
 
+>>>**Delete user**
 
-Delete user
 class = delete
+
 method = DELETE
+
 *https://app.com/users/23/*
+
 OR
+
 *https://app.com/users/?id=23*
+
 OR
+
 *https://app.com/users/?_method=delete&id=23*
 
-Response
 
+**Response**
+
+```json
 {
    "status": "200",
     "success": "true",
@@ -121,28 +166,41 @@ Response
         "id": 23
     }
 }
+```
 
 
 
 
+>>>**Showing users**
 
-Showing users
 Get all users
+
 class = index
+
 method = GET
+
 *https://app.com/users/*
+
 OR
+
 pagination of users
+
 *https://app.com/users/page/2/*
+
 OR
+
 limiting users
+
 *https://app.com/users/limit/2/*
+
 OR
+
 pagination and limit
+
 *https://app.com/users/page/2/limit/2/*
 
 
-Response
+**Response**
 
 {
     "status": "200",
@@ -170,5 +228,3 @@ Response
     ]
 }
 
-=========
->>>>>>>>> Temporary merge branch 2
