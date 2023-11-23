@@ -1,5 +1,4 @@
 name: PHP MVC API Install PHP and MySQL
-
 on:
   push:
     branches:
@@ -36,6 +35,9 @@ jobs:
       run: sudo npm install pm2@latest -g
 
   deploy:
+    - name: change to public dir
+      run: cd public
+
     - name: Start php server
       run: pm2 delete "php-app" || true && pm2 start "php -S localhost:8080" --name "php-app"
 
