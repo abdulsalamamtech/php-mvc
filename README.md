@@ -1,3 +1,3 @@
 
 
-**This is a dynamic mvc framework**
+**This is a dynamic mvc framework for api**
