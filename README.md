@@ -1,8 +1,5 @@
 
-
-**This is a dynamic mvc framework**
-
-
+**This is a dynamic mvc framework for api and full stack application**
 
 
 **MVC PHP API**
@@ -172,4 +169,5 @@ Response
         }
     ]
 }
+
 
