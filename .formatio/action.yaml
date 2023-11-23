@@ -1,5 +1,5 @@
 name: PHP MVC API Install PHP and MySQL
-run: cd public/
+
 on:
   push:
     branches:
